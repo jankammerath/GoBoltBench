@@ -6,7 +6,7 @@ This is a benchmark is written in Go and uses [shakespeare.txt](https://gist.git
 
 This benchmark used a 4GB 2 vCPU instance from [Marist University](https://www.marist.edu).
 
-```bash
+```
 
  ___ ____  __  __      _     _                   ___  _   _ _____
 |_ _| __ )|  \/  |    | |   (_)_ __  _   ___  __/ _ \| \ | | ____|
