@@ -34,7 +34,7 @@ Red Hat Enterprise Linux 9.6 (Plow)
 
 ## AWS Graviton3
 
-This benchmark used a `c7g.large` using and `io2` EBS (8,000 iops) instance in `us-east-1`.
+This benchmark used a `c7g.large` using and a 50GB `io2` EBS (8,000 iops) instance in `us-east-1`.
 
 Cost for this instance on AWS in `Frankfurt (eu-central-1)` would be **$67.67/month**.
 
@@ -57,6 +57,33 @@ Amazon Linux 2023.7.20250623
 2025/07/07 21:07:45 Processing 114634 lines with 16 workers
 2025/07/07 21:07:47 Total processing time: 1.850152923s
 ```
+
+## AMD EPYC 9R14, 4th Gen EPYC
+
+This benchmark used a `c7a.large` using and a 50GB `io2` EBS (8,000 iops) instance in `us-east-1`.
+
+Cost for this instance on AWS in `Frankfurt (eu-central-1)` would be **$92.95/month**.
+
+```
+
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+
+[ec2-user@ip-172-31-93-220 ~]$ ./goboltbench
+GoBoltBench — AMD EPYC 9R14 (3.97 GB)
+Amazon Linux 2023.7.20250623
+2025/07/07 21:35:43 Processing 114634 lines with 16 workers
+2025/07/07 21:35:45 Total processing time: 1.852400397s
+```
+
 
 ## Apple Macbook Pro M1 Pro
 
