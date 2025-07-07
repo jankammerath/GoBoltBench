@@ -1,10 +1,12 @@
 # GoBoltBench
 
-This is a benchmark is written in Go and uses [shakespeare.txt](https://gist.github.com/blakesanie/dde3a2b7e698f52f389532b4b52bc254) with [bbolt](https://github.com/etcd-io/bbolt) to benchmark AWS Graviton2 on `arm64` systems with IBM LinuxONE `s390x`. The application performs insertion of messages extracted from Shakespeare with random users assigned to them and the `sha256` hash calculated for each message. By doing so, the benchmark intents to mimic usual social media operation using the [etcd-io/bbolt](https://github.com/etcd-io/bbolt) key-value store.
+This is a benchmark is written in Go and uses [shakespeare.txt](https://gist.github.com/blakesanie/dde3a2b7e698f52f389532b4b52bc254) with [bbolt](https://github.com/etcd-io/bbolt) to benchmark AWS Graviton3 on `arm64` systems with IBM LinuxONE `s390x`. The application performs insertion of messages extracted from Shakespeare with random users assigned to them and the `sha256` hash calculated for each message. By doing so, the benchmark intents to mimic usual social media operation using the [etcd-io/bbolt](https://github.com/etcd-io/bbolt) key-value store.
 
 ## IBM LinuxONE
 
-This benchmark used a 4GB 2 vCPU instance from [Marist University](https://www.marist.edu).
+This benchmark used a 4GB instance from [Marist University](https://www.marist.edu).
+
+Cost for this instance on IBM Cloud in `Frankfurt (eu-de)` would be **$78.36/month**.
 
 ```
 
@@ -34,8 +36,10 @@ Red Hat Enterprise Linux 9.6 (Plow)
 
 This benchmark used a `c7g.large` using and `io2` EBS (8,000 iops) instance in `us-east-1`.
 
+Cost for this instance on AWS in `Frankfurt (eu-central-1)` would be **$67.67/month**.
+
 ```
-[ec2-user@ip-172-31-81-25 goboltbench]$ ./gobbench-graviton2
+[ec2-user@ip-172-31-81-25 goboltbench]$ ./gobbench-graviton3
 2025/07/07 21:07:45 Could not determine CPU name from /proc/cpuinfo, using default
 GoBoltBench — Unknown CPU (4.00 GB)
 Amazon Linux 2023.7.20250623
