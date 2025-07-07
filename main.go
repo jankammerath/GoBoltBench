@@ -44,45 +44,68 @@ func getRandomUser(users []string) string {
 	return users[index]
 }
 
-// worker processes a slice of lines and stores them as messages in the database
 func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg *sync.WaitGroup, workerID int) {
 	defer wg.Done()
 
-	for i, line := range lines {
-		// Skip empty lines
-		if strings.TrimSpace(line) == "" {
-			continue
+	const batchSize = 100
+	var batch []Message
+	var batchKeys []string
+
+	flushBatch := func() {
+		if len(batch) == 0 {
+			return
 		}
 
-		// Create a message with random user and the line text
-		message := Message{
-			UserName:    getRandomUser(users),
-			MessageText: line,
-		}
-
-		// Marshal message to JSON
-		messageJSON, err := json.Marshal(message)
-		if err != nil {
-			log.Printf("Worker %d: Failed to marshal message: %v", workerID, err)
-			continue
-		}
-
-		// Store in database
-		err = db.Update(func(tx *bbolt.Tx) error {
+		err := db.Update(func(tx *bbolt.Tx) error {
 			bucket := tx.Bucket([]byte(bucketName))
 			if bucket == nil {
 				return fmt.Errorf("bucket %s not found", bucketName)
 			}
 
-			// Generate a unique key for each message
-			key := fmt.Sprintf("worker_%d_msg_%d", workerID, i)
-			return bucket.Put([]byte(key), messageJSON)
+			for i, message := range batch {
+				messageJSON, err := json.Marshal(message)
+				if err != nil {
+					log.Printf("Worker %d: Failed to marshal message: %v", workerID, err)
+					continue
+				}
+
+				if err := bucket.Put([]byte(batchKeys[i]), messageJSON); err != nil {
+					return err
+				}
+			}
+			return nil
 		})
 
 		if err != nil {
-			log.Printf("Worker %d: Failed to store message: %v", workerID, err)
+			log.Printf("Worker %d: Failed to store batch: %v", workerID, err)
+		}
+
+		batch = batch[:0]
+		batchKeys = batchKeys[:0]
+	}
+
+	messageIndex := 0
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+
+		message := Message{
+			UserName:    getRandomUser(users),
+			MessageText: line,
+		}
+
+		batch = append(batch, message)
+		batchKeys = append(batchKeys, fmt.Sprintf("worker_%d_msg_%d", workerID, messageIndex))
+		messageIndex++
+
+		if len(batch) >= batchSize {
+			flushBatch()
 		}
 	}
+
+	// Flush remaining messages
+	flushBatch()
 
 	log.Printf("Worker %d completed processing %d lines", workerID, len(lines))
 }
@@ -134,47 +157,19 @@ func main() {
 
 	log.Printf("Processing %d lines with %d workers", len(lines), workerCount)
 
-	// Calculate lines per worker
-	linesPerWorker := len(lines) / workerCount
-	remainder := len(lines) % workerCount
-
 	var wg sync.WaitGroup
 
-	// Start workers
 	for i := 0; i < workerCount; i++ {
 		wg.Add(1)
 
-		// Calculate start and end indices for this worker
-		start := i * linesPerWorker
-		end := start + linesPerWorker
-
-		// Distribute remainder lines to the first few workers
-		if i < remainder {
-			end++
+		start := i * len(lines) / workerCount
+		end := (i + 1) * len(lines) / workerCount
+		if i == workerCount-1 {
+			end = len(lines) // Last worker gets remaining lines
 		}
 
-		// Adjust start for workers that get extra lines
-		if i > 0 && i <= remainder {
-			start += i
-		} else if i > remainder {
-			start += remainder
-		}
-
-		// Ensure we don't go out of bounds
-		if end > len(lines) {
-			end = len(lines)
-		}
-
-		// Skip if this worker has no lines to process
-		if start >= len(lines) {
-			wg.Done()
-			continue
-		}
-
-		workerLines := lines[start:end]
-		go worker(db, bucketName, workerLines, users, &wg, i)
+		go worker(db, bucketName, lines[start:end], users, &wg, i)
 	}
-
 	// Wait for all workers to complete
 	wg.Wait()
 	log.Println("All workers completed successfully")
