@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/klauspost/cpuid/v2"
+	"github.com/shirou/gopsutil/mem"
 	"go.etcd.io/bbolt"
 )
 
@@ -119,6 +120,25 @@ func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg 
 	flushBatch()
 }
 
+func getSysMemory() string {
+	v, err := mem.VirtualMemory()
+	if err != nil {
+		log.Fatalf("Error getting memory info: %v", err)
+	}
+
+	// return in GB
+	if v.Total < 1e9 {
+		return fmt.Sprintf("%.2f MB", float64(v.Total)/1e6)
+	}
+	if v.Total < 1e12 {
+		return fmt.Sprintf("%.2f GB", float64(v.Total)/1e9)
+	}
+	if v.Total < 1e15 {
+		return fmt.Sprintf("%.2f TB", float64(v.Total)/1e12)
+	}
+	return fmt.Sprintf("%d", v.Total)
+}
+
 func getCpuName() string {
 	result := cpuid.CPU.BrandName
 	if result == "" {
@@ -147,7 +167,8 @@ func getCpuName() string {
 }
 
 func main() {
-	fmt.Println("GoBoltBench —", getCpuName())
+	bannerText := fmt.Sprintf("GoBoltBench — %s (%s)", getCpuName(), getSysMemory())
+	fmt.Println(bannerText)
 
 	startTime := time.Now()
 
