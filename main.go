@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -16,6 +17,7 @@ import (
 type Message struct {
 	UserName    string `json:"userName"`
 	MessageText string `json:"messageText"`
+	Hash        string `json:"hash"`
 }
 
 func getUsers() []string {
@@ -35,6 +37,12 @@ func getLines() []string {
 	// Use strings.Fields instead of Split to avoid empty strings
 	lines := strings.Fields(string(file))
 	return lines
+}
+
+func sha256Hash(s string) string {
+	h := sha256.New()
+	h.Write([]byte(s))
+	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
 func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg *sync.WaitGroup, workerID int) {
@@ -93,6 +101,8 @@ func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg 
 		message := Message{
 			UserName:    randomUsers[i],
 			MessageText: line,
+			// calculate the sha256 hash of the message text
+			Hash: sha256Hash(line),
 		}
 
 		batch = append(batch, message)
