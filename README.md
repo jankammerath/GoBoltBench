@@ -52,7 +52,6 @@ Cost for this instance on AWS in `Frankfurt (eu-central-1)` would be **$67.67/mo
        _/m/'
 
 [ec2-user@ip-172-31-81-25 goboltbench]$ ./gobbench-graviton3
-2025/07/07 21:07:45 Could not determine CPU name from /proc/cpuinfo, using default
 GoBoltBench — Unknown CPU (4.00 GB)
 Amazon Linux 2023.7.20250623
 2025/07/07 21:07:45 Processing 114634 lines with 16 workers
