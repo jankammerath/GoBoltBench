@@ -8,9 +8,8 @@ This is a benchmark is written in Go and uses [shakespeare.txt](https://gist.git
 [linux1@linuxonedev goboltbench]$ ./gobbench-s390x
 GoBoltBench — IBM/S390 (3.65 GB)
 Red Hat Enterprise Linux 9.6 (Plow)
-2025/07/07 15:46:48 Processing 114634 lines with 16 workers
-2025/07/07 15:46:51 All workers completed successfully
-2025/07/07 15:46:51 Total processing time: 2.66731021s
+2025/07/07 15:47:41 Processing 114634 lines with 16 workers
+2025/07/07 15:47:44 Total processing time: 2.826166479s
 ```
 
 ## Apple Macbook Pro M1 Pro
@@ -18,7 +17,6 @@ Red Hat Enterprise Linux 9.6 (Plow)
 ```bash
 jan@MacBook-Pro-von-Jan GoBoltBench % ./bin/gobbench
 GoBoltBench — Apple M1 Pro (17.18 GB)
-2025/07/07 22:46:34 Processing 114634 lines with 16 workers
-2025/07/07 22:46:47 All workers completed successfully
-2025/07/07 22:46:47 Total processing time: 12.510591s
+2025/07/07 22:48:01 Processing 114634 lines with 16 workers
+2025/07/07 22:48:13 Total processing time: 12.516969333s
 ```
