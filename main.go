@@ -106,8 +106,6 @@ func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg 
 
 	// Flush remaining messages
 	flushBatch()
-
-	log.Printf("Worker %d completed processing %d lines", workerID, len(lines))
 }
 
 func main() {
