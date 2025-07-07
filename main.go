@@ -139,6 +139,25 @@ func getSysMemory() string {
 	return fmt.Sprintf("%d", v.Total)
 }
 
+func getOSName() string {
+	data, err := os.ReadFile("/etc/os-release")
+	if err != nil {
+		return "macOS"
+	}
+
+	lines := strings.Split(string(data), "\n")
+	for _, line := range lines {
+		if strings.HasPrefix(line, "PRETTY_NAME=") {
+			parts := strings.SplitN(line, "=", 2)
+			if len(parts) > 1 {
+				return strings.Trim(parts[1], "\"")
+			}
+		}
+	}
+
+	return "Unknown Linux Distro"
+}
+
 func getCpuName() string {
 	result := cpuid.CPU.BrandName
 	if result == "" {
@@ -169,6 +188,7 @@ func getCpuName() string {
 func main() {
 	bannerText := fmt.Sprintf("GoBoltBench — %s (%s)", getCpuName(), getSysMemory())
 	fmt.Println(bannerText)
+	fmt.Println(getOSName())
 
 	startTime := time.Now()
 

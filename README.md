@@ -11,3 +11,9 @@ GoBoltBench — IBM/S390 (3.65 GB)
 2025/07/07 15:30:09 All workers completed successfully
 2025/07/07 15:30:09 Total processing time: 21.515265237s
 ```
+
+## Apple Macbook Pro M1 Pro
+
+```bash
+
+```
