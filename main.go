@@ -36,8 +36,7 @@ func getLines() []string {
 		log.Fatalf("Failed to read test file: %v", err)
 	}
 
-	// Use strings.Fields instead of Split to avoid empty strings
-	lines := strings.Fields(string(file))
+	lines := strings.Split(string(file), "\n")
 	return lines
 }
 
@@ -263,7 +262,6 @@ func main() {
 	}
 	// Wait for all workers to complete
 	wg.Wait()
-	log.Println("All workers completed successfully")
 
 	totalTime := time.Since(startTime)
 	log.Printf("Total processing time: %v", totalTime)
