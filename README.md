@@ -4,6 +4,8 @@ This is a benchmark is written in Go and uses [shakespeare.txt](https://gist.git
 
 ## IBM LinuxONE
 
+This benchmark used a 4GB 2 vCPU instance from [Marist University](https://www.marist.edu).
+
 ```bash
 
  ___ ____  __  __      _     _                   ___  _   _ _____
@@ -30,6 +32,8 @@ Red Hat Enterprise Linux 9.6 (Plow)
 
 ## AWS Graviton2
 
+This benchmark used a `t4g.medium` instance in `us-east-1`.
+
 ```
 
    ,     #_
@@ -52,6 +56,8 @@ Amazon Linux 2023.7.20250623
 ```
 
 ## Apple Macbook Pro M1 Pro
+
+This is the local development reference system.
 
 ```bash
 jan@MacBook-Pro-von-Jan GoBoltBench % ./bin/gobbench
