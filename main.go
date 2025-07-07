@@ -31,7 +31,10 @@ func getLines() []string {
 	if err != nil {
 		log.Fatalf("Failed to read test file: %v", err)
 	}
-	return strings.Split(string(file), "\n")
+
+	// Use strings.Fields instead of Split to avoid empty strings
+	lines := strings.Fields(string(file))
+	return lines
 }
 
 func getRandomUser(users []string) string {
@@ -46,6 +49,13 @@ func getRandomUser(users []string) string {
 
 func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg *sync.WaitGroup, workerID int) {
 	defer wg.Done()
+
+	// Pre-generate random users for this worker's messages
+	rng := rand.New(rand.NewSource(time.Now().UnixNano() + int64(workerID)))
+	randomUsers := make([]string, len(lines))
+	for i := 0; i < len(lines); i++ {
+		randomUsers[i] = users[rng.Intn(len(users))]
+	}
 
 	const batchSize = 100
 	var batch []Message
@@ -85,13 +95,13 @@ func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg 
 	}
 
 	messageIndex := 0
-	for _, line := range lines {
+	for i, line := range lines {
 		if strings.TrimSpace(line) == "" {
 			continue
 		}
 
 		message := Message{
-			UserName:    getRandomUser(users),
+			UserName:    randomUsers[i],
 			MessageText: line,
 		}
 
@@ -124,8 +134,16 @@ func main() {
 		}
 	}
 
+	// Open the bbolt database with optimized options
+	dbOptions := &bbolt.Options{
+		Timeout:        1 * time.Second,
+		NoGrowSync:     true, // Don't sync after growing the database
+		NoFreelistSync: true, // Don't sync freelist to disk
+		FreelistType:   bbolt.FreelistMapType,
+	}
+
 	// Open the bbolt database.
-	db, err := bbolt.Open(dbFile, 0600, nil)
+	db, err := bbolt.Open(dbFile, 0600, dbOptions)
 	if err != nil {
 		log.Fatalf("Failed to open database: %v", err)
 	}
