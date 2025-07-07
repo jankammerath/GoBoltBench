@@ -37,16 +37,6 @@ func getLines() []string {
 	return lines
 }
 
-func getRandomUser(users []string) string {
-	if len(users) == 0 {
-		log.Fatal("No users available")
-	}
-
-	// return a random user from the list
-	index := rand.Intn(len(users))
-	return users[index]
-}
-
 func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg *sync.WaitGroup, workerID int) {
 	defer wg.Done()
 
