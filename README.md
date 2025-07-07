@@ -65,6 +65,6 @@ This is the local development reference system.
 ```bash
 jan@MacBook-Pro-von-Jan GoBoltBench % ./bin/gobbench
 GoBoltBench — Apple M1 Pro (17.18 GB)
-2025/07/07 22:48:01 Processing 114634 lines with 16 workers
-2025/07/07 22:48:13 Total processing time: 12.516969333s
+2025/07/07 23:19:35 Processing 114634 lines with 16 workers
+2025/07/07 23:19:47 Total processing time: 12.0409785s
 ```
