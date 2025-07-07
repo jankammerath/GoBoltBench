@@ -30,29 +30,17 @@ Red Hat Enterprise Linux 9.6 (Plow)
 2025/07/07 15:47:44 Total processing time: 2.826166479s
 ```
 
-## AWS Graviton2
+## AWS Graviton3
 
-This benchmark used a `t4g.medium` instance in `us-east-1`.
+This benchmark used a `c7g.large` using and `io2` EBS (8,000 iops) instance in `us-east-1`.
 
 ```
-
-   ,     #_
-   ~\_  ####_        Amazon Linux 2023
-  ~~  \_#####\
-  ~~     \###|
-  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
-   ~~       V~' '->
-    ~~~         /
-      ~~._.   _/
-         _/ _/
-       _/m/'
-
-[ec2-user@graviton2 goboltbench]$ ./gobbench-graviton2
-2025/07/07 20:56:16 Could not determine CPU name from /proc/cpuinfo, using default
-GoBoltBench — Unknown CPU (4.02 GB)
+[ec2-user@ip-172-31-81-25 goboltbench]$ ./gobbench-graviton2
+2025/07/07 21:07:45 Could not determine CPU name from /proc/cpuinfo, using default
+GoBoltBench — Unknown CPU (4.00 GB)
 Amazon Linux 2023.7.20250623
-2025/07/07 20:56:16 Processing 114634 lines with 16 workers
-2025/07/07 20:56:31 Total processing time: 14.147012498s
+2025/07/07 21:07:45 Processing 114634 lines with 16 workers
+2025/07/07 21:07:47 Total processing time: 1.850152923s
 ```
 
 ## Apple Macbook Pro M1 Pro
