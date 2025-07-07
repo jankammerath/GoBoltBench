@@ -39,6 +39,18 @@ This benchmark used a `c7g.large` using and `io2` EBS (8,000 iops) instance in `
 Cost for this instance on AWS in `Frankfurt (eu-central-1)` would be **$67.67/month**.
 
 ```
+
+   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+  ~~     \###|
+  ~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+   ~~       V~' '->
+    ~~~         /
+      ~~._.   _/
+         _/ _/
+       _/m/'
+
 [ec2-user@ip-172-31-81-25 goboltbench]$ ./gobbench-graviton3
 2025/07/07 21:07:45 Could not determine CPU name from /proc/cpuinfo, using default
 GoBoltBench — Unknown CPU (4.00 GB)
