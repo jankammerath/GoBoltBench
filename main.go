@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/klauspost/cpuid/v2"
 	"go.etcd.io/bbolt"
 )
 
@@ -118,7 +119,36 @@ func worker(db *bbolt.DB, bucketName string, lines []string, users []string, wg 
 	flushBatch()
 }
 
+func getCpuName() string {
+	result := cpuid.CPU.BrandName
+	if result == "" {
+		// get from /cat/proc/cpuinfo if BrandName is empty
+		data, err := os.ReadFile("/proc/cpuinfo")
+		if err != nil {
+			log.Fatalf("Failed to read /proc/cpuinfo: %v", err)
+		}
+		lines := strings.Split(string(data), "\n")
+		for _, line := range lines {
+			if strings.HasPrefix(line, "vendor_id") {
+				parts := strings.SplitN(line, ":", 2)
+				if len(parts) > 1 {
+					result = strings.TrimSpace(parts[1])
+					break
+				}
+			}
+		}
+		if result == "" {
+			log.Println("Could not determine CPU name from /proc/cpuinfo, using default")
+			result = "Unknown CPU"
+		}
+	}
+
+	return result
+}
+
 func main() {
+	fmt.Println("GoBoltBench —", getCpuName())
+
 	startTime := time.Now()
 
 	const workerCount = 16
