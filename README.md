@@ -77,7 +77,7 @@ Cost for this instance on AWS in `Frankfurt (eu-central-1)` would be **$92.95/mo
          _/ _/
        _/m/'
 
-[ec2-user@ip-172-31-93-220 ~]$ ./goboltbench
+[ec2-user@ip-172-31-93-220 ~]$ ./goboltbench-amd64
 GoBoltBench — AMD EPYC 9R14 (3.97 GB)
 Amazon Linux 2023.7.20250623
 2025/07/07 21:35:43 Processing 114634 lines with 16 workers
